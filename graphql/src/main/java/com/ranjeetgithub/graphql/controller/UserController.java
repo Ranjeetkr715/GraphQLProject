@@ -40,4 +40,24 @@ public class UserController {
     public boolean deleteUserById(@Argument int userId){
         return userService.deleteUserById(userId);
     }
+
+    @MutationMapping(name = "updateUser")
+    public User updateUser(@Argument int userId,
+                           @Argument String name,
+                           @Argument String email,
+                           @Argument String phoneNo,
+                           @Argument String password) {
+        User user = userService.getUserById(userId); // fetch existing user
+        if (user == null) {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+
+        if (name != null) user.setName(name);
+        if (email != null) user.setEmail(email);
+        if (phoneNo != null) user.setPhoneNo(phoneNo);
+        if (password != null) user.setPassword(password);
+
+        return userService.createUser(user);
+    }
+
 }
